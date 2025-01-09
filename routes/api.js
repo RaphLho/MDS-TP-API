@@ -1,94 +1,76 @@
 const express = require('express');
-const UtilisateurController = require('../controllers/UtilisateurController');
 const router = express.Router();
 const authenticateJWT = require('../middleware/authentification');
+const usersController = require('../controllers/usersController');
 
-router.get('/utilisateurs', authenticateJWT, UtilisateurController.getUtilisateurs);
-router.get('/utilisateurs/:id', authenticateJWT, UtilisateurController.getUtilisateurById);
-router.post('/login', UtilisateurController.login);
+router.get('/users', authenticateJWT, usersController.getUsers);
+router.get('/users/:id', authenticateJWT, usersController.getUserById);
+router.post('/login', usersController.login);
 
-router.get('/gpu_models', authenticateJWT, GpuModelController.getGpuModels);
-router.get('/gpu_models/:id', authenticateJWT, GpuModelController.getGpuModelById);
-router.post('/gpu_models', authenticateJWT, GpuModelController.createGpuModel);
-router.put('/gpu_models/:id', authenticateJWT, GpuModelController.updateGpuModel);
-router.delete('/gpu_models/:id', authenticateJWT, GpuModelController.deleteGpuModel);
+// Import all controllers
+const gpuSeriesController = require('../controllers/gpu_seriesController');
+const gpuModelsController = require('../controllers/gpu_modelsController');
+const manufacturersController = require('../controllers/manufacturersController');
+const supplierProductsController = require('../controllers/supplier_productsController');
+const cartItemsController = require('../controllers/cart_itemsController');
+const customerCartsController = require('../controllers/customer_cartsController');
+const deliveryController = require('../controllers/deliveryController');
+const statusController = require('../controllers/statusController');
 
-router.get('/suppliers', authenticateJWT, SupplierController.getSuppliers);
-router.get('/suppliers/:id', authenticateJWT, SupplierController.getSupplierById);
-router.post('/suppliers', authenticateJWT, SupplierController.createSupplier);
-router.put('/suppliers/:id', authenticateJWT, SupplierController.updateSupplier);
-router.delete('/suppliers/:id', authenticateJWT, SupplierController.deleteSupplier);
+// GPU Series routes
+router.get('/gpu_series', authenticateJWT, gpuSeriesController.getGpuSeries);
+router.get('/gpu_series/:id', authenticateJWT, gpuSeriesController.getGpuSeriesById);
+router.post('/gpu_series', authenticateJWT, gpuSeriesController.createGpuSeries);
+router.put('/gpu_series/:id', authenticateJWT, gpuSeriesController.updateGpuSeries);
+router.delete('/gpu_series/:id', authenticateJWT, gpuSeriesController.deleteGpuSeries);
 
-router.get('/supplier_products', authenticateJWT, SupplierProductController.getSupplierProducts);
-router.get('/supplier_products/:id', authenticateJWT, SupplierProductController.getSupplierProductById);
-router.post('/supplier_products', authenticateJWT, SupplierProductController.createSupplierProduct);
-router.put('/supplier_products/:id', authenticateJWT, SupplierProductController.updateSupplierProduct);
-router.delete('/supplier_products/:id', authenticateJWT, SupplierProductController.deleteSupplierProduct);
+// GPU Models routes
+router.get('/gpu_models', authenticateJWT, gpuModelsController.getGpuModels);
+router.get('/gpu_models/:id', authenticateJWT, gpuModelsController.getGpuModelById);
+router.post('/gpu_models', authenticateJWT, gpuModelsController.createGpuModel);
+router.put('/gpu_models/:id', authenticateJWT, gpuModelsController.updateGpuModel);
+router.delete('/gpu_models/:id', authenticateJWT, gpuModelsController.deleteGpuModel);
 
-router.get('/cart_items', authenticateJWT, CartItemController.getCartItems);
-router.get('/cart_items/:id', authenticateJWT, CartItemController.getCartItemById);
-router.post('/cart_items', authenticateJWT, CartItemController.createCartItem);
-router.put('/cart_items/:id', authenticateJWT, CartItemController.updateCartItem);
-router.delete('/cart_items/:id', authenticateJWT, CartItemController.deleteCartItem);
+// Manufacturers routes
+router.get('/manufacturers', authenticateJWT, manufacturersController.getManufacturers);
+router.get('/manufacturers/:id', authenticateJWT, manufacturersController.getManufacturerById);
+router.post('/manufacturers', authenticateJWT, manufacturersController.createManufacturer);
+router.put('/manufacturers/:id', authenticateJWT, manufacturersController.updateManufacturer);
+router.delete('/manufacturers/:id', authenticateJWT, manufacturersController.deleteManufacturer);
 
-router.get('/messages', authenticateJWT, MessageController.getMessages);
-router.get('/messages/:id', authenticateJWT, MessageController.getMessageById);
-router.post('/messages', authenticateJWT, MessageController.createMessage);
-router.put('/messages/:id', authenticateJWT, MessageController.updateMessage);
-router.delete('/messages/:id', authenticateJWT, MessageController.deleteMessage);
+// Supplier Products routes
+router.get('/supplier_products', authenticateJWT, supplierProductsController.getSupplierProducts);
+router.get('/supplier_products/:id', authenticateJWT, supplierProductsController.getSupplierProductById);
+router.post('/supplier_products', authenticateJWT, supplierProductsController.createSupplierProduct);
+router.put('/supplier_products/:id', authenticateJWT, supplierProductsController.updateSupplierProduct);
+router.delete('/supplier_products/:id', authenticateJWT, supplierProductsController.deleteSupplierProduct);
 
-router.get('/comments', authenticateJWT, CommentController.getComments);
-router.get('/comments/:id', authenticateJWT, CommentController.getCommentById);
-router.post('/comments', authenticateJWT, CommentController.createComment);
-router.put('/comments/:id', authenticateJWT, CommentController.updateComment);
-router.delete('/comments/:id', authenticateJWT, CommentController.deleteComment);
+// Cart Items routes
+router.get('/cart_items', authenticateJWT, cartItemsController.getCartItems);
+router.get('/cart_items/:id', authenticateJWT, cartItemsController.getCartItemById);
+router.post('/cart_items', authenticateJWT, cartItemsController.createCartItem);
+router.put('/cart_items/:id', authenticateJWT, cartItemsController.updateCartItem);
+router.delete('/cart_items/:id', authenticateJWT, cartItemsController.deleteCartItem);
 
-router.get('/orders', authenticateJWT, OrderController.getOrders);
-router.get('/orders/:id', authenticateJWT, OrderController.getOrderById);
-router.post('/orders', authenticateJWT, OrderController.createOrder);
-router.put('/orders/:id', authenticateJWT, OrderController.updateOrder);
-router.delete('/orders/:id', authenticateJWT, OrderController.deleteOrder);
+// Customer Carts routes
+router.get('/customer_carts', authenticateJWT, customerCartsController.getCustomerCarts);
+router.get('/customer_carts/:id', authenticateJWT, customerCartsController.getCustomerCartById);
+router.post('/customer_carts', authenticateJWT, customerCartsController.createCustomerCart);
+router.put('/customer_carts/:id', authenticateJWT, customerCartsController.updateCustomerCart);
+router.delete('/customer_carts/:id', authenticateJWT, customerCartsController.deleteCustomerCart);
 
-router.get('/series', authenticateJWT, SeriesController.getSeries);
-router.get('/series/:id', authenticateJWT, SeriesController.getSeriesById);
-router.post('/series', authenticateJWT, SeriesController.createSeries);
-router.put('/series/:id', authenticateJWT, SeriesController.updateSeries);
-router.delete('/series/:id', authenticateJWT, SeriesController.deleteSeries);
+// Delivery routes
+router.get('/delivery', authenticateJWT, deliveryController.getDelivery);
+router.get('/delivery/:id', authenticateJWT, deliveryController.getDeliveryById);
+router.post('/delivery', authenticateJWT, deliveryController.createDelivery);
+router.put('/delivery/:id', authenticateJWT, deliveryController.updateDelivery);
+router.delete('/delivery/:id', authenticateJWT, deliveryController.deleteDelivery);
 
-router.get('/customers_carts', authenticateJWT, CustomersCartController.getCustomersCarts);
-router.get('/customers_carts/:id', authenticateJWT, CustomersCartController.getCustomersCartById);
-router.post('/customers_carts', authenticateJWT, CustomersCartController.createCustomersCart);
-router.put('/customers_carts/:id', authenticateJWT, CustomersCartController.updateCustomersCart);
-router.delete('/customers_carts/:id', authenticateJWT, CustomersCartController.deleteCustomersCart);
-
-router.get('/delivery', authenticateJWT, DeliveryController.getDelivery);
-router.get('/delivery/:id', authenticateJWT, DeliveryController.getDeliveryById);
-router.post('/delivery', authenticateJWT, DeliveryController.createDelivery);
-router.put('/delivery/:id', authenticateJWT, DeliveryController.updateDelivery);
-router.delete('/delivery/:id', authenticateJWT, DeliveryController.deleteDelivery);
-
-router.get('/gpu_series', authenticateJWT, GpuSeriesController.getGpuSeries);
-router.get('/gpu_series/:id', authenticateJWT, GpuSeriesController.getGpuSeriesById);
-router.post('/gpu_series', authenticateJWT, GpuSeriesController.createGpuSeries);
-router.put('/gpu_series/:id', authenticateJWT, GpuSeriesController.updateGpuSeries);
-router.delete('/gpu_series/:id', authenticateJWT, GpuSeriesController.deleteGpuSeries);
-
-router.get('/manufacturers', authenticateJWT, ManufacturerController.getManufacturers);
-router.get('/manufacturers/:id', authenticateJWT, ManufacturerController.getManufacturerById);
-router.post('/manufacturers', authenticateJWT, ManufacturerController.createManufacturer);
-router.put('/manufacturers/:id', authenticateJWT, ManufacturerController.updateManufacturer);
-router.delete('/manufacturers/:id', authenticateJWT, ManufacturerController.deleteManufacturer);
-
-router.get('/status', authenticateJWT, StatusController.getStatus);
-router.get('/status/:id', authenticateJWT, StatusController.getStatusById);
-router.post('/status', authenticateJWT, StatusController.createStatus);
-router.put('/status/:id', authenticateJWT, StatusController.updateStatus);
-router.delete('/status/:id', authenticateJWT, StatusController.deleteStatus);
-
-router.get('/stocks', authenticateJWT, StockController.getStocks);
-router.get('/stocks/:id', authenticateJWT, StockController.getStockById);
-router.post('/stocks', authenticateJWT, StockController.createStock);
-router.put('/stocks/:id', authenticateJWT, StockController.updateStock);
-router.delete('/stocks/:id', authenticateJWT, StockController.deleteStock);
+// Status routes
+router.get('/status', authenticateJWT, statusController.getStatuses);
+router.get('/status/:id', authenticateJWT, statusController.getStatusById);
+router.post('/status', authenticateJWT, statusController.createStatus);
+router.put('/status/:id', authenticateJWT, statusController.updateStatus);
+router.delete('/status/:id', authenticateJWT, statusController.deleteStatus);
 
 module.exports = router;
