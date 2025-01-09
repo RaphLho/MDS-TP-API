@@ -9,7 +9,6 @@ const port = 3001;
 app.use(express.json());
 
 app.use('/api', api);
-app.use('/api', utilisateursRoutes);
 
 sequelize.sync().then(() => {
     console.log('✅ Base de données synchronisée');

@@ -1,38 +1,33 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./connectionBDD');
 
-const utilisateurs = sequelize.define('users', {
+const messages = sequelize.define('messages', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    email: {
-        type: DataTypes.STRING,
-        unique: true,
+    sender_id: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    password_hash: {
-        type: DataTypes.STRING,
+    receiver_id: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    first_name: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    last_name: {
+    subject: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    phone: {
-        type: DataTypes.STRING,
-        allowNull: true
+    message_text: {
+        type: DataTypes.TEXT,
+        allowNull: false
     },
-    created_at: {
+    sent_at: {
         type: DataTypes.DATE,
         allowNull: false
     },
-    modified_at: {
+    read_at: {
         type: DataTypes.DATE,
         allowNull: true
     },
@@ -40,15 +35,11 @@ const utilisateurs = sequelize.define('users', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
-    },
-    user_type: {
-        type: DataTypes.STRING,
-        allowNull: false
     }
 }, {
-    tableName: 'users',
-    schema: 'common',
+    tableName: 'messages',
+    schema: 'b2b',
     timestamps: false
 });
 
-module.exports = utilisateurs;
+module.exports = messages;

@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('SQLserveurTP', 'API_BDD', 'fox', {
+const sequelize = new Sequelize('TPgpuBDD', 'API_BDD', 'fox', {
     host: 'localhost',
     dialect: 'mssql',
     port: 1433,

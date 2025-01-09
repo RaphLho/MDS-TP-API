@@ -1,31 +1,30 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./connectionBDD');
 
-const utilisateurs = sequelize.define('users', {
+const delivery = sequelize.define('delivery', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    email: {
-        type: DataTypes.STRING,
-        unique: true,
+    order_id: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    password_hash: {
-        type: DataTypes.STRING,
+    delivery_status_id: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    first_name: {
-        type: DataTypes.STRING,
-        allowNull: false
+    assigned_to: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
-    last_name: {
-        type: DataTypes.STRING,
-        allowNull: false
+    estimated_delivery_date: {
+        type: DataTypes.DATE,
+        allowNull: true
     },
-    phone: {
-        type: DataTypes.STRING,
+    actual_delivery_date: {
+        type: DataTypes.DATE,
         allowNull: true
     },
     created_at: {
@@ -40,15 +39,11 @@ const utilisateurs = sequelize.define('users', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
-    },
-    user_type: {
-        type: DataTypes.STRING,
-        allowNull: false
     }
 }, {
-    tableName: 'users',
+    tableName: 'delivery',
     schema: 'common',
     timestamps: false
 });
 
-module.exports = utilisateurs;
+module.exports = delivery;
