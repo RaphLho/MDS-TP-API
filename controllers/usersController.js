@@ -1,111 +1,135 @@
-const Utilisateur = require('../models/utilisateurs');
+const User = require('../models/users');
 const jwt = require('jsonwebtoken');
 const secretKey = "ddrace";
 
-const getUtilisateurs = async (req, res) => {
+const getUsers = async (req, res) => {
     try {
-        const utilisateurs = await Utilisateur.findAll({
+        const users = await User.findAll({
             where: {
                 is_deleted: false
             }
         });
-        res.json(utilisateurs);
+        res.json(users);
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-}
+};
 
-const getUtilisateurById = async (req, res) => {
+const getUserById = async (req, res) => {
     try {
-        const utilisateur = await Utilisateur.findOne({
-            where: {
-                id: req.params.id,
-                is_deleted: false
-            }
-        });
-        if (utilisateur) {
-            res.json(utilisateur);
-        } else {
-            res.status(404).send({ message: 'Utilisateur not found' });
-        }
-    } catch (error) {
-        res.status(500).send({ message: error.message });
-    }
-}
-
-const createUtilisateur = async (req, res) => {
-    try {
-        const utilisateur = await Utilisateur.create(req.body);
-        res.status(201).json(utilisateur);
-    } catch (error) {
-        res.status(500).send({ message: error.message });
-    }
-}
-
-const updateUtilisateur = async (req, res) => {
-    try {
-        const utilisateur = await Utilisateur.findOne({
+        const user = await User.findOne({
             where: {
                 id: req.params.id,
                 is_deleted: false
             }
         });
-        if (utilisateur) {
-            await utilisateur.update(req.body);
-            res.json(utilisateur);
+        if (user) {
+            res.json(user);
         } else {
-            res.status(404).send({ message: 'Utilisateur not found' });
+            res.status(404).send({ message: 'User not found' });
         }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-}
+};
 
-const deleteUtilisateur = async (req, res) => {
+const createUser = async (req, res) => {
     try {
-        const utilisateur = await Utilisateur.findOne({
+        const user = await User.create({
+            ...req.body,
+            created_at: new Date()
+        });
+        res.status(201).json(user);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+};
+
+const updateUser = async (req, res) => {
+    try {
+        const user = await User.findOne({
             where: {
                 id: req.params.id,
                 is_deleted: false
             }
         });
-        if (utilisateur) {
-            await utilisateur.update({ is_deleted: true });
-            res.json({ message: 'Utilisateur deleted successfully' });
+        if (user) {
+            // Extract only the allowed fields from request body
+            const {
+                email,
+                password_hash,
+                first_name,
+                last_name,
+                phone,
+                user_type
+            } = req.body;
+
+            await user.update({
+                email,
+                password_hash,
+                first_name,
+                last_name,
+                phone,
+                user_type,
+                modified_at: new Date()
+            });
+            res.json(user);
         } else {
-            res.status(404).send({ message: 'Utilisateur not found' });
+            res.status(404).send({ message: 'User not found' });
         }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-}
+};
+
+const deleteUser = async (req, res) => {
+    try {
+        const user = await User.findOne({
+            where: {
+                id: req.params.id,
+                is_deleted: false
+            }
+        });
+        if (user) {
+            await user.update({ 
+                is_deleted: true,
+                modified_at: new Date()
+            });
+            res.status(204).send();
+        } else {
+            res.status(404).send({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+};
 
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const utilisateur = await Utilisateur.findOne({ 
+        const user = await User.findOne({ 
             where: { 
                 email: email, 
                 password_hash: password,
                 is_deleted: false 
             } 
         });
-        if (utilisateur) {
-            const token = jwt.sign({ id: utilisateur.id }, secretKey, { expiresIn: '1800s' });
+        if (user) {
+            const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1800s' });
             res.json({ token });
         } else {
-            res.status(401).send({ message: 'Email ou mot de passe incorrect' });
+            res.status(401).send({ message: 'Invalid email or password' });
         }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-}
+};
 
-module.exports = { 
-    getUtilisateurs, 
-    getUtilisateurById, 
-    createUtilisateur,
-    updateUtilisateur,
-    deleteUtilisateur,
-    login 
+module.exports = {
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser,
+    login
 };

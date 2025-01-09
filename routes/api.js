@@ -3,10 +3,6 @@ const router = express.Router();
 const authenticateJWT = require('../middleware/authentification');
 const usersController = require('../controllers/usersController');
 
-router.get('/users', authenticateJWT, usersController.getUsers);
-router.get('/users/:id', authenticateJWT, usersController.getUserById);
-router.post('/login', usersController.login);
-
 // Import all controllers
 const gpuSeriesController = require('../controllers/gpu_seriesController');
 const gpuModelsController = require('../controllers/gpu_modelsController');
@@ -16,6 +12,13 @@ const cartItemsController = require('../controllers/cart_itemsController');
 const customerCartsController = require('../controllers/customer_cartsController');
 const deliveryController = require('../controllers/deliveryController');
 const statusController = require('../controllers/statusController');
+
+router.get('/users', authenticateJWT, usersController.getUsers);
+router.get('/users/:id', authenticateJWT, usersController.getUserById);
+router.post('/users', authenticateJWT, usersController.createUser);
+router.put('/users/:id', authenticateJWT, usersController.updateUser);
+router.delete('/users/:id', authenticateJWT, usersController.deleteUser);
+router.post('/login', usersController.login);
 
 // GPU Series routes
 router.get('/gpu_series', authenticateJWT, gpuSeriesController.getGpuSeries);

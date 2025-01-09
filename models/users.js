@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./connectionBDD');
 
-const utilisateurs = sequelize.define('users', {
+const users = sequelize.define('users', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -51,4 +51,4 @@ const utilisateurs = sequelize.define('users', {
     timestamps: false
 });
 
-module.exports = utilisateurs;
+module.exports = users;

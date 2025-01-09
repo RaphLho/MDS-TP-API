@@ -1,7 +1,7 @@
 const express = require('express');
 const api = require('./routes/api');
 const sequelize = require('./models/connectionBDD');
-const utilisateursRoutes = require('./routes/utilisateurs');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 const port = 3001;
@@ -9,6 +9,7 @@ const port = 3001;
 app.use(express.json());
 
 app.use('/api', api);
+app.use('/users', usersRoutes);
 
 sequelize.sync().then(() => {
     console.log('✅ Base de données synchronisée');
