@@ -12,13 +12,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     }
 });
 
-console.log('DB Config:', {
-    name: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-    port: process.env.DB_PORT
-});
 
 // Tester la connexion
 sequelize.authenticate()
