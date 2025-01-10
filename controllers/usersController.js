@@ -35,10 +35,36 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const user = await User.create({
-            ...req.body,
-            created_at: new Date()
+        // Validate required fields
+        const { email, password_hash, first_name, last_name, user_type, created_at } = req.body;
+        if (!email || !password_hash || !first_name || !last_name || !user_type || !created_at) {
+            return res.status(400).send({ message: 'Missing required fields' });
+        }
+
+        // Check if user with this email already exists
+        const existingUser = await User.findOne({
+            where: {
+                email: email,
+                is_deleted: false
+            }
         });
+
+        if (existingUser) {
+            return res.status(409).send({ message: 'User with this email already exists' });
+        }
+
+        // Create new user
+        const user = await User.create({
+            email,
+            password_hash,
+            first_name,
+            last_name,
+            phone: req.body.phone || null,
+            user_type,
+            created_at,
+            is_deleted: false
+        });
+
         res.status(201).json(user);
     } catch (error) {
         res.status(500).send({ message: error.message });
@@ -71,7 +97,6 @@ const updateUser = async (req, res) => {
                 last_name,
                 phone,
                 user_type,
-                modified_at: new Date()
             });
             res.json(user);
         } else {
@@ -91,11 +116,8 @@ const deleteUser = async (req, res) => {
             }
         });
         if (user) {
-            await user.update({ 
-                is_deleted: true,
-                modified_at: new Date()
-            });
-            res.status(204).send();
+            await user.update({ is_deleted: true });
+            res.json({ message: 'User deleted successfully' });
         } else {
             res.status(404).send({ message: 'User not found' });
         }

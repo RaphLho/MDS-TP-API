@@ -29,11 +29,11 @@ const users = sequelize.define('users', {
         allowNull: true
     },
     created_at: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false
     },
     modified_at: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: true
     },
     is_deleted: {

@@ -33,6 +33,13 @@ const getSupplierProductById = async (req, res) => {
 
 const createSupplierProduct = async (req, res) => {
     try {
+        // Validate price
+        if (req.body.price && (req.body.price < 0 || req.body.price > 999999999.99)) {
+            return res.status(400).send({ 
+                message: 'Price must be between 0 and 999,999,999.99' 
+            });
+        }
+
         const supplierProduct = await SupplierProduct.create(req.body);
         res.status(201).json(supplierProduct);
     } catch (error) {
@@ -42,6 +49,13 @@ const createSupplierProduct = async (req, res) => {
 
 const updateSupplierProduct = async (req, res) => {
     try {
+        // Validate price
+        if (req.body.price && (req.body.price < 0 || req.body.price > 999999999.99)) {
+            return res.status(400).send({ 
+                message: 'Price must be between 0 and 999,999,999.99' 
+            });
+        }
+
         const supplierProduct = await SupplierProduct.findOne({
             where: {
                 id: req.params.id,
