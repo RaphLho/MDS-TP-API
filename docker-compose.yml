@@ -9,9 +9,9 @@ services:
       - sqlserver
     environment:
       - DB_HOST=sqlserver
-      - DB_USER=sa
-      - DB_PASSWORD=yourStrongPassword!
-      - DB_NAME=YourDatabase
+      - DB_USER=API_BDD
+      - DB_PASSWORD=fox
+      - DB_NAME=TPgpuBDD
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
