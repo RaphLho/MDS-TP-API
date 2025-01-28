@@ -1,0 +1,163 @@
+:root {
+    --primary: #00fff2;
+    --secondary: #0a1128;
+    --accent: #ff2a6d;
+    --bg: #05071b;
+    --text: #e7e7e7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+.chat-windows {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.chat-window {
+    background: linear-gradient(145deg, #060922, #0a1128);
+    border-radius: 15px;
+    padding: 1rem;
+    border: 1px solid rgba(0, 255, 242, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 255, 242, 0.1);
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.window-title {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 255, 242, 0.2);
+}
+
+.messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.message {
+    padding: 0.8rem;
+    border-radius: 10px;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease-in;
+    word-wrap: break-word;
+}
+
+.message.sent {
+    background: linear-gradient(135deg, var(--primary), #00b4ff);
+    color: var(--secondary);
+    align-self: flex-end;
+}
+
+.message.received {
+    background: rgba(255, 255, 255, 0.1);
+    align-self: flex-start;
+}
+
+.system-message {
+    text-align: center;
+    color: var(--accent);
+    font-style: italic;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}
+
+.input-form {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.input-form input {
+    flex-grow: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-form input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 2px var(--primary);
+}
+
+.input-form button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    background: var(--primary);
+    color: var(--secondary);
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.input-form button:hover {
+    background: #00ccff;
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.timestamp {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 0.3rem;
+}
+
+.user-info {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+}

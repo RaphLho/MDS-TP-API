@@ -1,7 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const authenticateJWT = require('../middleware/authentification');
 const usersController = require('../controllers/usersController');
+
+// Définir la route pour les assets statiques
+router.use('/asset', express.static(path.join(__dirname, '../asset')));
+
+router.get('/socket', (req, res) => {
+    res.sendFile(path.join(__dirname, '../SocketIO.html'));
+});
 
 // Import all controllers
 const gpuSeriesController = require('../controllers/gpu_seriesController');
