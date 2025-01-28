@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const authenticateJWT = require('../middleware/authentification');
-const usersController = require('../controllers/usersController');
+
 
 // Définir la route pour les assets statiques
 router.use('/asset', express.static(path.join(__dirname, '../asset')));
@@ -11,64 +11,68 @@ router.get('/socket', (req, res) => {
     res.sendFile(path.join(__dirname, '../SocketIO.html'));
 });
 
+
+// User routes
+const usersController = require('../controllers/usersController');
+
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Authenticate user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: Invalid credentials
+ */
+router.post('/login', usersController.login);
+
+
 // Import all controllers
-const gpuSeriesController = require('../controllers/gpu_seriesController');
-const gpuModelsController = require('../controllers/gpu_modelsController');
-const manufacturersController = require('../controllers/manufacturersController');
-const supplierProductsController = require('../controllers/supplier_productsController');
 const cartItemsController = require('../controllers/cart_itemsController');
-const customerCartsController = require('../controllers/customer_cartsController');
 const deliveryController = require('../controllers/deliveryController');
 const statusController = require('../controllers/statusController');
 
-router.get('/users', authenticateJWT, usersController.getUsers);
-router.get('/users/:id', authenticateJWT, usersController.getUserById);
-router.post('/users', authenticateJWT, usersController.createUser);
-router.put('/users/:id', authenticateJWT, usersController.updateUser);
-router.delete('/users/:id', authenticateJWT, usersController.deleteUser);
-router.post('/login', usersController.login);
-
-// GPU Series routes
-router.get('/gpu_series', authenticateJWT, gpuSeriesController.getGpuSeries);
-router.get('/gpu_series/:id', authenticateJWT, gpuSeriesController.getGpuSeriesById);
-router.post('/gpu_series', authenticateJWT, gpuSeriesController.createGpuSeries);
-router.put('/gpu_series/:id', authenticateJWT, gpuSeriesController.updateGpuSeries);
-router.delete('/gpu_series/:id', authenticateJWT, gpuSeriesController.deleteGpuSeries);
-
-// GPU Models routes
-router.get('/gpu_models', authenticateJWT, gpuModelsController.getGpuModels);
-router.get('/gpu_models/:id', authenticateJWT, gpuModelsController.getGpuModelById);
-router.post('/gpu_models', authenticateJWT, gpuModelsController.createGpuModel);
-router.put('/gpu_models/:id', authenticateJWT, gpuModelsController.updateGpuModel);
-router.delete('/gpu_models/:id', authenticateJWT, gpuModelsController.deleteGpuModel);
-
-// Manufacturers routes
-router.get('/manufacturers', authenticateJWT, manufacturersController.getManufacturers);
-router.get('/manufacturers/:id', authenticateJWT, manufacturersController.getManufacturerById);
-router.post('/manufacturers', authenticateJWT, manufacturersController.createManufacturer);
-router.put('/manufacturers/:id', authenticateJWT, manufacturersController.updateManufacturer);
-router.delete('/manufacturers/:id', authenticateJWT, manufacturersController.deleteManufacturer);
-
-// Supplier Products routes
-router.get('/supplier_products', authenticateJWT, supplierProductsController.getSupplierProducts);
-router.get('/supplier_products/:id', authenticateJWT, supplierProductsController.getSupplierProductById);
-router.post('/supplier_products', authenticateJWT, supplierProductsController.createSupplierProduct);
-router.put('/supplier_products/:id', authenticateJWT, supplierProductsController.updateSupplierProduct);
-router.delete('/supplier_products/:id', authenticateJWT, supplierProductsController.deleteSupplierProduct);
-
-// Cart Items routes
+/**
+ * @swagger
+ * /api/cart_items:
+ *   get:
+ *     summary: Get all cart items
+ *     tags: [Cart Items]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of cart items
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ */
 router.get('/cart_items', authenticateJWT, cartItemsController.getCartItems);
-router.get('/cart_items/:id', authenticateJWT, cartItemsController.getCartItemById);
-router.post('/cart_items', authenticateJWT, cartItemsController.createCartItem);
-router.put('/cart_items/:id', authenticateJWT, cartItemsController.updateCartItem);
-router.delete('/cart_items/:id', authenticateJWT, cartItemsController.deleteCartItem);
-
-// Customer Carts routes
-router.get('/customer_carts', authenticateJWT, customerCartsController.getCustomerCarts);
-router.get('/customer_carts/:id', authenticateJWT, customerCartsController.getCustomerCartById);
-router.post('/customer_carts', authenticateJWT, customerCartsController.createCustomerCart);
-router.put('/customer_carts/:id', authenticateJWT, customerCartsController.updateCustomerCart);
-router.delete('/customer_carts/:id', authenticateJWT, customerCartsController.deleteCustomerCart);
 
 // Delivery routes
 router.get('/delivery', authenticateJWT, deliveryController.getDelivery);

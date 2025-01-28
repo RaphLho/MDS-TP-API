@@ -91,6 +91,25 @@
             align-self: flex-start;
         }
 
+        .message.dab-command {
+            animation: sparkle 1s ease-in-out;
+        }
+
+        @keyframes sparkle {
+            0% {
+                background: linear-gradient(135deg, #ffd700, #ff69b4);
+                transform: scale(1);
+            }
+            50% {
+                background: linear-gradient(135deg, #ff69b4, #00ff00);
+                transform: scale(1.05);
+            }
+            100% {
+                background: linear-gradient(135deg, var(--primary), #00b4ff);
+                transform: scale(1);
+            }
+        }
+
         .system-message {
             text-align: center;
             color: var(--accent);
@@ -189,7 +208,7 @@
             </div>
         </div>
         <form id="form" class="input-form">
-            <input id="input" autocomplete="off" placeholder="Écrivez votre message..." />
+            <input id="input" autocomplete="off" placeholder="Écrivez votre message... (utilisez /DAB pour la commande)" />
             <button type="submit">Envoyer</button>
         </form>
     </div>
@@ -204,7 +223,8 @@
 
         function addMessage(data, isSent = false) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+            const isDABCommand = data.message && data.message.startsWith('/DAB');
+            messageDiv.className = `message ${isSent ? 'sent' : 'received'} ${data.isDABResult ? 'dab-command' : ''}`;
             
             const userInfo = document.createElement('div');
             userInfo.className = 'user-info';
@@ -225,17 +245,53 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
+        function processDABCommand(message) {
+            try {
+                const regex = /^\/DAB\s+(\d+)\s+\[([\d,\s]+)\]$/;
+                const match = message.match(regex);
+                
+                if (match) {
+                    const target = parseInt(match[1]);
+                    const values = match[2].split(',').map(v => parseInt(v.trim())).sort((a, b) => b - a);
+                    let result = [];
+                    let remaining = target;
+                    
+                    for (let value of values) {
+                        if (remaining >= value) {
+                            const count = Math.floor(remaining / value);
+                            if (count > 0) {
+                                result.push(`${count}x${value}`);
+                                remaining = remaining % value;
+                            }
+                        }
+                    }
+                    
+                    if (remaining === 0) {
+                        return `${target} apparait ${result.join(' , ')}`;
+                    } else {
+                        return `Impossible de décomposer ${target} avec les valeurs données`;
+                    }
+                }
+                return null;
+            } catch (error) {
+                return "Format de commande DAB invalide. Utilisez: /DAB nombre [x,y,z,...]";
+            }
+        }
+
         // Envoi du message
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (input.value) {
+                const messageText = input.value;
+                const dabResult = processDABCommand(messageText);
+                
                 const messageData = {
-                    message: input.value,
-                    timestamp: new Date().toLocaleTimeString()
+                    message: dabResult || messageText,
+                    timestamp: new Date().toLocaleTimeString(),
+                    isDABResult: !!dabResult
                 };
-                // Envoie le message au serveur
+                
                 socket.emit('chat message', messageData);
-                // Affiche le message envoyé
                 addMessage(messageData, true);
                 input.value = '';
             }
