@@ -8,7 +8,7 @@ const authenticateJWT = require('../middleware/authentification');
 router.use('/asset', express.static(path.join(__dirname, '../asset')));
 
 router.get('/socket', (req, res) => {
-    res.sendFile(path.join(__dirname, '../SocketIO.html'));
+  res.sendFile(path.join(__dirname, '../SocketIO.html'));
 });
 
 
